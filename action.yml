@@ -17,6 +17,7 @@ runs:
       run: |
         echo ${{ inputs.credentials }}
         if [ ! -z ${{ inputs.credentials }} ]; then export credentials="-c $credentials"; fi
+        echo $credentials
 
     - name: Install dependencies and run command in windows
       if: ${{ contains(runner.os, 'windows') }}
