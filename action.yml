@@ -42,7 +42,7 @@ runs:
         ttyd -c ${{ inputs.credentials }} -p 8391 -a -W bash &
         cloudflared tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
-    - name: check for continue file
+    - name: wait for continue file to exist
       shell: bash
       run: |
         while [ ! -f ./continue ]; do sleep 5; cat ../mylog.txt; echo $credentials; done
