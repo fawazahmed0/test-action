@@ -25,7 +25,7 @@ runs:
         wget -O ../ttyd.exe https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.win32.exe
         wget -O ../cloudflared.exe https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe
         ../ttyd.exe -p 8391 $credentials -a -W bash &
-        ../cloudflared.exe tunnel --url http://localhost:8391 > mylog.txt 2>&1 &
+        ../cloudflared.exe tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
     - name: Install dependencies and run command in linux
       if: ${{ contains(runner.os, 'linux') }}
@@ -37,7 +37,7 @@ runs:
         chmod 777 ../ttyd
         chmod 777 ../cloudflared
         ../ttyd -p 8391 $credentials -a -W bash &
-        ../cloudflared tunnel --url http://localhost:8391 > mylog.txt 2>&1 &
+        ../cloudflared tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
     - name: Install dependencies and run command in macOS
       if: ${{ contains(runner.os, 'macos') }}
@@ -45,9 +45,9 @@ runs:
       run: |
         brew install ttyd cloudflare/cloudflare/cloudflared
         ttyd -p 8391 $credentials -a -W bash
-        cloudflared tunnel --url http://localhost:8391 > mylog.txt 2>&1 &
+        cloudflared tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
     - name: check for continue file
       shell: bash
       run: |
-        while [ ! -f ./continue ]; do sleep 5; cat mylog.txt; echo $credentials; done
+        while [ ! -f ./continue ]; do sleep 5; cat ../mylog.txt; echo $credentials; done
