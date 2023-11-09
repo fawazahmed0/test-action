@@ -5,19 +5,13 @@ author: 'Fawaz Ahmed'
 # Define your inputs here.
 inputs:
   credentials:
-    description: 'Set credentials in username:password format to access the terminal. Default is passwordless terminal access'
+    description: 'Set credentials in username:password format to access the terminal. Default value is admin:admin'
     required: false
+    default: 'admin:admin'
 
 runs:
   using: "composite"
   steps:
-
-    - name: Set credentials if exists
-      shell: bash
-      run: |
-        echo ${{ inputs.credentials }}
-        if [ ! -z ${{ inputs.credentials }} ]; then export credentials="-c ${{ inputs.credentials }}"; fi
-        echo $credentials
 
     - name: Install dependencies and run command in windows
       if: ${{ contains(runner.os, 'windows') }}
@@ -25,7 +19,7 @@ runs:
       run: |
         wget -O ../ttyd.exe https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.win32.exe
         wget -O ../cloudflared.exe https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe
-        ../ttyd.exe -p 8391 $credentials -a -W bash &
+        ../ttyd.exe -c ${{ inputs.credentials }} -p 8391 -a -W bash &
         ../cloudflared.exe tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
     - name: Install dependencies and run command in linux
@@ -37,7 +31,7 @@ runs:
         wget -O ../cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
         chmod 777 ../ttyd
         chmod 777 ../cloudflared
-        ../ttyd -p 8391 $credentials -a -W bash &
+        ../ttyd -c ${{ inputs.credentials }} -p 8391 -a -W bash &
         ../cloudflared tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
     - name: Install dependencies and run command in macOS
@@ -45,7 +39,7 @@ runs:
       shell: bash
       run: |
         brew install ttyd cloudflare/cloudflare/cloudflared
-        ttyd -p 8391 $credentials -a -W bash
+        ttyd -c ${{ inputs.credentials }} -p 8391 -a -W bash
         cloudflared tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
     - name: check for continue file
