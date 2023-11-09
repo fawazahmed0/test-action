@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
 
-    - name: Install dependencies and run command in windows
+    - name: Install dependencies and run commands in windows
       if: ${{ contains(runner.os, 'windows') }}
       shell: bash
       run: |
@@ -22,7 +22,7 @@ runs:
         ../ttyd.exe -c ${{ inputs.credentials }} -p 8391 -a cmd &
         ../cloudflared.exe tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
-    - name: Install dependencies and run command in linux
+    - name: Install dependencies and run commands in linux
       if: ${{ contains(runner.os, 'linux') }}
       shell: bash
       run: |
@@ -34,7 +34,7 @@ runs:
         ../ttyd -c ${{ inputs.credentials }} -p 8391 -a -W bash &
         ../cloudflared tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
-    - name: Install dependencies and run command in macOS
+    - name: Install dependencies and run commands in macOS
       if: ${{ contains(runner.os, 'macos') }}
       shell: bash
       run: |
