@@ -3971,11 +3971,11 @@ async function run() {
     const cred = core.getInput('credentials')
     let credOption = ''
 
-    if (cred) credOption = `-c ${cred}`
+    if (cred) credOption = `-c "${cred}"`
 
     if (os.type() == 'Darwin') {
       await exec.exec('brew install ttyd cloudflare/cloudflare/cloudflared')
-      await exec.exec(`ttyd -p 8391 -a -W ${credOption} bash &`)
+      await exec.exec(`ttyd -p 8391 ${credOption} -a -W bash &`)
       await exec.exec(
         'cloudflared tunnel --url http://localhost:8391 > mylog.txt 2>&1 &'
       )
