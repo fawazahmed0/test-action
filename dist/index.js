@@ -3979,7 +3979,7 @@ async function run() {
       exec.exec('cloudflared tunnel --url http://localhost:8391')
     } else if (os.type() == 'Linux') {
       await exec.exec(
-        'wget -O ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.4/ttyd.aarch64'
+        'wget -O ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.4/ttyd.x86_64'
       )
       await exec.exec(
         'wget -O cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64'
