@@ -8,8 +8,6 @@ inputs:
     description: 'Set credentials in username:password format to access the terminal. Default is passwordless terminal access'
     required: false
 
-env:
-  credentials: ${{ inputs.credentials }}
 runs:
   using: "composite"
   steps:
@@ -17,7 +15,8 @@ runs:
     - name: Set credentials if exists
       shell: bash
       run: |
-        if [ ! -z "$credentials" ]; then export credentials="-c $credentials"; fi
+        echo ${{ inputs.credentials }}
+        if [ ! -z ${{ inputs.credentials }} ]; then export credentials="-c $credentials"; fi
 
     - name: Install dependencies and run command in windows
       if: ${{ contains(runner.os, 'windows') }}
@@ -32,6 +31,7 @@ runs:
       if: ${{ contains(runner.os, 'linux') }}
       shell: bash
       run: |
+        echo $credentials
         wget -O ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.4/ttyd.x86_64
         wget -O cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
         chmod 777 ttyd
