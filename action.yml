@@ -1,18 +1,12 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Debugging with ttyd'
+description: 'Debug your GitHub Actions Environment interactively through web browser'
+author: 'Fawaz Ahmed'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  credentials:
+    description: 'Set credentials in username:password format to access the terminal. Default is passwordless terminal access'
+    required: false
 
 runs:
   using: node20
