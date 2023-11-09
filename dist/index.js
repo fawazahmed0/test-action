@@ -3971,7 +3971,7 @@ async function run() {
     const cred = core.getInput('credentials')
     let credOption = ''
 
-    if (cred) credOption = `-c "${cred}"`
+    if (cred) credOption = `-c ${cred}`
 
     if (os.type() == 'Darwin') {
       await exec.exec('brew install ttyd cloudflare/cloudflare/cloudflared')
