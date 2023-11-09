@@ -39,7 +39,7 @@ runs:
       shell: bash
       run: |
         brew install ttyd cloudflare/cloudflare/cloudflared
-        ttyd -c ${{ inputs.credentials }} -p 8391 -a -W bash
+        ttyd -c ${{ inputs.credentials }} -p 8391 -a -W bash &
         cloudflared tunnel --url http://localhost:8391 > ../mylog.txt 2>&1 &
 
     - name: check for continue file
