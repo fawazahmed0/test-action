@@ -16,7 +16,7 @@ runs:
       shell: bash
       run: |
         echo ${{ inputs.credentials }}
-        if [ ! -z ${{ inputs.credentials }} ]; then export credentials="-c $credentials"; fi
+        if [ ! -z ${{ inputs.credentials }} ]; then export credentials="-c ${{ inputs.credentials }}"; fi
         echo $credentials
 
     - name: Install dependencies and run command in windows
