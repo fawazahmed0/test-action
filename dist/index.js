@@ -3976,7 +3976,9 @@ async function run() {
     if (os.type() == 'Darwin') {
       await exec.exec('brew install ttyd cloudflare/cloudflare/cloudflared')
       await exec.exec(`ttyd -p 8391 -a -W ${credOption} bash &`)
-      await exec.exec('cloudflared tunnel --url http://localhost:8391 &')
+      await exec.exec(
+        'cloudflared tunnel --url http://localhost:8391 > mylog.txt 2>&1 &'
+      )
     } else if (os.type() == 'Linux') {
       await exec.exec(
         'wget -O ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.4/ttyd.aarch64'
@@ -3987,7 +3989,9 @@ async function run() {
       await exec.exec('chmod 777 ttyd')
       await exec.exec('chmod 777 cloudflared')
       await exec.exec(`./ttyd -p 8391 -a -W ${credOption} bash &`)
-      await exec.exec('./cloudflared tunnel --url http://localhost:8391 &')
+      await exec.exec(
+        './cloudflared tunnel --url http://localhost:8391 > mylog.txt 2>&1 &'
+      )
     } else if (os.type() == 'Windows_NT') {
       await exec.exec(
         'wget -O ttyd.exe https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.win32.exe'
@@ -3996,17 +4000,28 @@ async function run() {
         'wget -O cloudflared.exe https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe'
       )
       await exec.exec(`./ttyd.exe -p 8391 -a -W ${credOption} bash &`)
-      await exec.exec('./cloudflared.exe tunnel --url http://localhost:8391 &')
+      await exec.exec(
+        './cloudflared.exe tunnel --url http://localhost:8391  > mylog.txt 2>&1 &'
+      )
     }
 
     let continuePath1 = path.join(__dirname, 'continue')
     let continuePath2 = path.join(process.env.GITHUB_WORKSPACE, 'continue')
+    await sleep(30_000)
+
+    let logfile = path.join(process.env.GITHUB_WORKSPACE, 'mylog.txt')
+    let content = await fs.readFile(logfile, { encoding: 'utf8' })
+    let url = Array.from(
+      content.matchAll(/-{10,}.*?(?<url>https?:\/\/.*?)\s.*?-{10,}/gis)
+    )?.[0]?.groups?.url
+    await fs.rm(e, { recursive: true, force: true })
 
     while (
       !(await fileExists(continuePath1)) &&
       !(await fileExists(continuePath2))
     ) {
-      await sleep('1000')
+      await sleep(5000)
+      core.debug(url)
     }
   } catch (error) {
     // Fail the workflow run if an error occurs
