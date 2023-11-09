@@ -14,13 +14,10 @@ runs:
   using: "composite"
   steps:
 
-    - name: Set credentials
+    - name: Set credentials if exists
       shell: bash
       run: |
         if [ ! -z "$credentials" ]; then export credentials="-c $credentials"; fi
-
-
-
 
     - name: Install dependencies and run command in windows
       if: ${{ contains(runner.os, 'windows') }}
