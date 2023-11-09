@@ -10,19 +10,18 @@ const path = require('node:path')
  */
 async function run() {
   try {
+    let myOutput = ''
+    let myError = ''
 
-    let myOutput = '';
-let myError = '';
-
-const options = {};
-options.listeners = {
-  stdout: (data) => {
-    myOutput += data.toString();
-  },
-  stderr: (data) => {
-    myError += data.toString();
-  }
-};
+    const options = {}
+    options.listeners = {
+      stdout: data => {
+        myOutput += data.toString()
+      },
+      stderr: data => {
+        myError += data.toString()
+      }
+    }
 
     const cred = core.getInput('credentials')
     let credOption = ''
@@ -43,7 +42,7 @@ options.listeners = {
       await exec.exec('chmod 777 ttyd')
       await exec.exec('chmod 777 cloudflared')
       exec.exec(`./ttyd -p 8391 -a -W ${credOption} bash`)
-      exec.exec('./cloudflared tunnel --url http://localhost:8391',options)
+      exec.exec('./cloudflared tunnel --url http://localhost:8391', options)
     } else if (os.type() == 'Windows_NT') {
       await exec.exec(
         'wget -O ttyd.exe https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.win32.exe'
@@ -52,18 +51,16 @@ options.listeners = {
         'wget -O cloudflared.exe https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe'
       )
       exec.exec(`./ttyd.exe -p 8391 -a -W ${credOption} bash`)
-      exec.exec('./cloudflared.exe tunnel --url http://localhost:8391',options)
+      exec.exec('./cloudflared.exe tunnel --url http://localhost:8391', options)
     }
 
     let continuePath1 = path.join(__dirname, 'continue')
     let continuePath2 = path.join(process.env.GITHUB_WORKSPACE, 'continue')
     await sleep(30_000)
 
-  
     let url = Array.from(
       myOutput.matchAll(/-{10,}.*?(?<url>https?:\/\/.*?)\s.*?-{10,}/gis)
     )?.[0]?.groups?.url
-      
 
     while (
       !(await fileExists(continuePath1)) &&
