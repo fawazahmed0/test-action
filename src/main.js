@@ -11,7 +11,6 @@ const path = require('node:path')
 async function run() {
   try {
     const cred = core.getInput('credentials')
-    await exec.exec('node', ['index.js', 'foo=bar'])
     let credOption = ''
 
     if (cred) credOption = `-c ${cred}`
