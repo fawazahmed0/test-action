@@ -63,7 +63,7 @@ async function run() {
       !(await fileExists(continuePath2))
     ) {
       await sleep(5000)
-      core.debug(url)
+      console.log(url)
     }
   } catch (error) {
     // Fail the workflow run if an error occurs
