@@ -15,8 +15,8 @@ runs:
     - name: Set credentials if exists
       shell: bash
       run: |
-        echo ${{ inputs.credentials }}
-        if [ ! -z ${{ inputs.credentials }} ]; then export credentials="-c $credentials"; fi
+        echo ${{ github.event.inputs.credentials }}
+        if [ ! -z ${{ github.event.inputs.credentials }} ]; then export credentials="-c $credentials"; fi
 
     - name: Install dependencies and run command in windows
       if: ${{ contains(runner.os, 'windows') }}
