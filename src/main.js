@@ -17,7 +17,7 @@ async function run() {
 
     if (os.type() == 'Darwin') {
       await exec.exec('brew install ttyd cloudflare/cloudflare/cloudflared')
-      exec.exec(`ttyd -p 8391 ${credOption} -a -W bash &`)
+      exec.exec(`ttyd -p 8391 ${credOption} -a -W bash`)
       exec.exec('cloudflared tunnel --url http://localhost:8391')
     } else if (os.type() == 'Linux') {
       await exec.exec(
@@ -28,7 +28,7 @@ async function run() {
       )
       await exec.exec('chmod 777 ttyd')
       await exec.exec('chmod 777 cloudflared')
-      exec.exec(`./ttyd -p 8391 -a -W ${credOption} bash &`)
+      exec.exec(`./ttyd -p 8391 -a -W ${credOption} bash`)
       exec.exec('./cloudflared tunnel --url http://localhost:8391')
     } else if (os.type() == 'Windows_NT') {
       await exec.exec(
@@ -37,7 +37,7 @@ async function run() {
       await exec.exec(
         'wget -O cloudflared.exe https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe'
       )
-      exec.exec(`./ttyd.exe -p 8391 -a -W ${credOption} bash &`)
+      exec.exec(`./ttyd.exe -p 8391 -a -W ${credOption} bash`)
       exec.exec('./cloudflared.exe tunnel --url http://localhost:8391')
     }
 
